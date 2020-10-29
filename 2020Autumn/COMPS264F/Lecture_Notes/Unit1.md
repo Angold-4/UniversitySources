@@ -1,7 +1,6 @@
 # Unit1 -- Logic
 
-
-## 1.Puzzle
+## 1.Puzzle: Heaven
 **In the middle of the journey to afterlife, you need to select whether to go East or West at a branch.**<br>
 **One is the path to hell and the other is to heaven, but you cannot tell which is which.**<br>
 **A knowledgeable man called Tom knows the way.<br>Yet you are informed that Tom either <u>always tells the truth</u> or <u>always lies.</u>**<br>
