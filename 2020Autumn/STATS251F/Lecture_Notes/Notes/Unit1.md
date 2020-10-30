@@ -26,8 +26,6 @@
         * [Ordinal Scale](#ordinal-scale)
         * [Interval Scale](#interval-scale)
         * [Ratio Scale](#ratio-scale)
-    * [Jargons in Survey Sampling](#jargons-in-survey-sampling)
-        * [Element](#element)
 
 <!-- vim-markdown-toc -->
 
@@ -132,24 +130,3 @@ Examples:<br>
 2. 20kg mass of an object is twice as heavy as 10kg mass of another object.
   
 <br>
-
-
-### Jargons in Survey Sampling
-#### Element
-**An element is an object on which a measurement is taken.**<br>
-
-
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
