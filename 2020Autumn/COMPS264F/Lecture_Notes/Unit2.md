@@ -53,3 +53,37 @@ void modified_halts(char *f_code) {
 ### Enlightenment -- The power of computing
 **With the development of electronic technology and computer technology, the storage and computing power of computers is advancing day by day. Some problems that seemed infeasible before can now be easily solved. But not when storage and computing power When it is infinite, can we solve any problem? The downtime problem gives a negative answer, --  no matter how strong the storage and computing power of the computer, the downtime problem cannot be solved.**
 
+
+## 2.Mathematical Induction
+![mathematical_induction](sources/mathematical_induction.png)
+
+<br>
+**Let's see a proof:**<br>
+### Theorem
+**Show that any 2n x 2n chessboard with one square removed can be covered using L-shaped pieces (each occupying 3 squares) only.**
+
+### Proof
+* **Basis step, n = 1: No matter where the missing square is, the remaining three squares can be covered by one L-shaped piece.**
+
+* **Inductive step: Assume the claim is true for some n ≥ 1. Consider a chessboard of size 2n+1 x 2n+1.**<br>
+
+**Then divide the board into 4 quadrants, each containing 2n x 2n squares.**
+
+![L-shape](sources/L-shape.png)
+
+**Obviously. In Bottom right corner of the diagram -- the quadrant containing the missing square can be covered using L-shaped pieces.**
+<br>
+**Cover the center using one L-shaped piece.**<br>
+**Then apply the induction hypothesis to cover each individual quadrant using L-shaped pieces.**
+
+
+
+
+
+
+
+
+
+
+
+
