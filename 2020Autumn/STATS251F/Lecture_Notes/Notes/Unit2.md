@@ -2,11 +2,28 @@
 
 #### By Jiawei Wang
 
-<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
-
 **[Unit2.pdf](https://github.com/Angold-4/UniversitySources/blob/master/2020Autumn/STATS251F/Lecture_Notes/Unit%202%20-%20Parameter%20Estimation.pdf)**
 
+**<font color=red>For thouse people who cannot see fomular instead of these char below:</font><br>**
+```
+$$
+f(x) = \frac 1{ \sqrt{2 \pi} \sigma} e^{- \frac 12 ({ \frac {x- \mu}{\sigma}})^2}
+$$
+```
+**<font color=red>Please download this Chrome Extention: [MathJax Plugin for Github](https://chrome.google.com/webstore/detail/mathjax-plugin-for-github/ioemnmodlmafdkllaclgeombjnmnbima/related?utm_source=chrome-ntp-icon), and open this page again :-) thx!</font>**
 
+
+<!-- vim-markdown-toc GFM -->
+
+* [Unit 2 - Sampling Distribution of Means & Parameter Estimation](#unit-2---sampling-distribution-of-means--parameter-estimation)
+    * [1.Random Variable](#1random-variable)
+        * [Discrete Random Variable](#discrete-random-variable)
+        * [Continuous Random Variable](#continuous-random-variable)
+    * [2.Normal Distribution](#2normal-distribution)
+        * [Standard Normal Distribution](#standard-normal-distribution)
+        * [Normal Random Variable](#normal-random-variable)
+
+<!-- vim-markdown-toc -->
 
 ## Unit 2 - Sampling Distribution of Means & Parameter Estimation
 
@@ -77,6 +94,7 @@ $$
 **<center>And the $\mu$ is the pop mean, which can be proof by calculate the integral of area</center>**
 
 ![normal](sources/normal.png)
+
 
 #### Standard Normal Distribution
 
