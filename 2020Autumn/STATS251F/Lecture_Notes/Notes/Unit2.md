@@ -2,7 +2,11 @@
 
 #### By Jiawei Wang
 
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+
 **[Unit2.pdf](https://github.com/Angold-4/UniversitySources/blob/master/2020Autumn/STATS251F/Lecture_Notes/Unit%202%20-%20Parameter%20Estimation.pdf)**
+
+
 
 ## Unit 2 - Sampling Distribution of Means & Parameter Estimation
 
