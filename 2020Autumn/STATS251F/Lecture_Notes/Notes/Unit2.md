@@ -22,6 +22,10 @@ $$
     * [2.Normal Distribution](#2normal-distribution)
         * [Standard Normal Distribution](#standard-normal-distribution)
         * [Normal Random Variable](#normal-random-variable)
+    * [3.Central Limit Theorem](#3central-limit-theorem)
+        * [Fig1](#fig1)
+        * [Fig2](#fig2)
+        * [Standard Error of The Mean](#standard-error-of-the-mean)
 
 <!-- vim-markdown-toc -->
 
@@ -114,6 +118,41 @@ $$
 #### Normal Random Variable
 **If a random variable X follows a normal distribution, we use the following symbol:**<br>
 **<center>X ~ $N( \mu , \sigma ^2)$**</center><br>
+
+
+### 3.Central Limit Theorem
+
+**When a population is normally distributed, the sampling distribution must be normally distributed no matter how small the sample size.**
+
+**When a population is non-normally distributed, the sampling distribution will be approximately normally distributed when the sample size tends to infinity.**
+
+#### Fig1
+**Please check this [reference](http://onlinestatbook.com/stat_sim/sampling_dist/) to test by yourself. provided by [onlinestatbook.com](www.onlinestatbook.com)**
+
+**This is a custom random destribution, which mean is 15.33**<br>
+![randomcustom](sources/randomcustom.png)
+
+**When it takes only 100 times sampling, and the sample size(N) is 5.<br>The Distribution of means would be like that:**
+![Fig2](sources/fig2.png)
+
+**When it takes 100000 times sampling, and the sample size(N) is 5.<br>The Distribution of means would be like that:<br>**
+![Fig1](sources/Fig1.png)
+
+
+#### Fig2
+**As the sample size, n increases, the standard deviation of sample means, $ \sigma _ x$ decreases.**
+![fig3](sources/fig3.png)
+
+
+#### Standard Error of The Mean
+
+$$
+s.e = \sigma _ x = \frac \sigma {\sqrt n}
+$$
+
+* **When N = 1. the s.e. is just the standard deviation**
+* **As the sample size increases, the s.e. decreases.**
+
 
 
 
