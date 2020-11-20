@@ -29,9 +29,12 @@ $$
     * [4. Parameter Estimation](#4-parameter-estimation)
         * [Point Estimation](#point-estimation)
         * [Interval Estimation](#interval-estimation)
-        * [Confidence Interval Contruction](#confidence-interval-contruction)
+        * [Confidence Interval Contruction(z-distribution)](#confidence-interval-contructionz-distribution)
         * [Z - Table](#z---table)
         * [T - Table](#t---table)
+        * [Degree of Freedom](#degree-of-freedom)
+        * [Probability Density Function of t-distribution](#probability-density-function-of-t-distribution)
+        * [Confidence Interval Contruction(t-distribution)](#confidence-interval-contructiont-distribution)
 
 <!-- vim-markdown-toc -->
 
@@ -235,7 +238,7 @@ $$
 <br>
 
 
-#### Confidence Interval Contruction
+#### Confidence Interval Contruction(z-distribution)
 **For an interval with (1-$\alpha$)100% confidence, its two end points on the left and right sides are $\pm z_{\alpha/2}$. The probability statement of the confidence interval for a normal population mean ($\mu$) is given by:**
 
 <center>![construction](sources/construction.png)</center>
@@ -256,7 +259,6 @@ $$
 
 **From this table, we can find that:<br>**
 
-* **Example:<br>**
 
 | **Significance Level, $\alpha$** | **Confidence Level $1-\alpha$** | **$Z_\frac \alpha 2$** |
 | :----: | :----: | :----: |
@@ -277,6 +279,65 @@ $$
 
 
 ![t-table](sources/t-table.png)
+
+#### Degree of Freedom
+**Selig (1994) stated that degrees of freedom (df) are lost for each parameter in a model that is estimated in the process of estimating another parameter.**<br>
+
+* **1 df is lost when we estimate the population mean, $\mu$ using the sample mean:<br><br>**
+**Let $\lbrace x_1,x_2,...,x_n \rbrace $ be random sample.<br>**
+**When we use the sample mean $\bar x = \frac 1n \sum^n_{i=1} x_i $ to estimate $\mu$ ($\hat{\mu} = \bar x$).<br>**
+**Then for every random samples $\lbrace x_1, x_2, ..., x_{n_1} \rbrace$, that means we treat their sample mean $\bar x$ as $\hat{\mu}$. <br>**
+**Because for every random samples, their sample mean are define as $\hat {\mu}$, we can see that for each of them (assume the sample size is $n_1$), if we gave the value of $n_1 - 1$ samples, the remaining one is definited.**<br><br>
+**Without loss of generality, n samples, leaving one degree of freedom for a fixed mean, and the remaining degree of freedom is n-1.**
+
+<br>
+
+**After understanding the degree of freedom, we can understand the sample variance metioned earlier:<br>**
+$$
+S = \sqrt {\frac 1{n-1} \sum_{i=1}^{n} (X_i - \bar{X})^2} \implies \sigma = \sqrt {\frac 1N \sum_{i=1}^{N} (X_i - \mu)^2}
+$$
+
+**Because when we caculating the sample variance, the sample mean needs to be given. Considering that variance is a statistic that measures the degree of data deviation.<br>**
+**Therefore, in order to calculate the sample variance, the original n degrees of freedom in the sample, one degree of freedom is assigned to calculate the sample mean, and the remaining degrees of freedom are n-1.**
+
+#### Probability Density Function of t-distribution
+**The probability density function(pdf) of the Student’s t-distribution is given by:<br>**
+$$
+f(x) = \frac {\tau (\frac {v+1}{2})}{\sqrt{v\pi}\tau (\frac v2)} (1 + \frac {x^2}{v})^{- \frac {v+1}{2}}
+$$
+**Where $\tau (s) = \int_0^{+\infty} x^{s-1}e^{-x} dx$ and $v$ is the degree of freedom of the t-distribution.**
+
+![10](sources/10.png)
+![100](sources/100.png)
+
+
+#### Confidence Interval Contruction(t-distribution)
+**If the population SD ($\sigma$) is UNKNOWN and n < 30, then the corresponding normal distribution is changed to the t-distribution.**
+
+$$
+P[-t_{\frac {\alpha}{2};k} \leq z \leq t_{\frac {\alpha}{2};k}] = 1 - \alpha
+$$
+
+$$
+P[-t_{\frac {\alpha}{2};k} \leq \frac {\bar x - \mu}{s/ \sqrt{n}} \leq t_{\frac {\alpha}{2};k}] = 1 - \alpha
+$$
+
+$$
+P[\bar x - t_{\alpha/2;k} \frac {s}{\sqrt n} \leq \mu \leq \bar x + t_{\alpha/2;k} \frac {s}{\sqrt n}] = 1 - \alpha
+$$
+
+<center>![tconstruction](sources/tconstruction.png)
+
+
+**k is the degrees of freedom which equal to n-1**
+
+
+
+
+
+
+
+
 
 
 
