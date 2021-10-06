@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Bootstrap Example</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<style>
+		ul {
+			list-style: none;
+			padding-left: 0px;
+		}
+
+		ul li:hover {
+			/* text-decoration: line-through; */
+			/* color: red; */
+			font-weight: bold;
+			cursor: pointer;
+		}
+
+		ul li.checked::before {
+			content: "\2611\0020";
+			/* color: green; */
+		}
+
+		ul li::before {
+			content: "\2610\0020";
+		}
+	</style>
+
+</head>
+ 
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<H2 class="d-inline-block">My Todo List</H2>
+                <span id="systemStatus" class="badge badge-danger align-top">0</span>
+
+				<div class="mt-2">
+					<ul id="todo"></ul>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="input-group">
+					<input id="newItem" class="form-control" placeholder="Walk the dog">
+					<div class="input-group-append">
+						<button class="btn btn-primary" type="button" id="button-addon2" onclick="add()">Add</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+
+	<script>
+
+		document.getElementById("todo").addEventListener("click", function(e) {
+			e.target.classList.toggle("checked");
+			updateSystemStatus();
+		});
+
+		function add() {
+			if (document.getElementById("newItem").value == "") {
+				alert("Please enter To-Do description");
+			} else {
+				var node = document.createElement("LI");
+				var textnode = document.createTextNode(
+					document.getElementById("newItem").value
+				);
+				node.appendChild(textnode);
+				document.getElementById("todo").appendChild(node);
+				document.getElementById("newItem").value = "";
+				updateSystemStatus();
+			}
+		}
+
+		<!-- Add your code below -->
+        document.getElementById("todo").onHTMLUpdate = updateSystemStatus();
+
+		function updateSystemStatus() {
+			let todo = document.getElementById("todo").getElementsByTagName("li");
+			let n = 0;
+			for (var i=0; i < todo.length; i++) {
+				if (!todo[i].classList.contains("checked")) {
+					n++;
+				}
+			}
+			document.getElementById("systemStatus").innerHTML = n;
+		}
+
+		
+
+
+	</script>
+</body>
+</html>

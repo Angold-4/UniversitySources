@@ -1,0 +1,1151 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="profile" href="https://gmpg.org/xfn/11" />
+	<title>Blog &#8211; angold4.com</title>
+<script type="text/javascript">
+  WebFontConfig = {"google":{"families":["Oswald:b:latin,latin-ext","Ubuntu:r,i,b,bi:latin,latin-ext"]}};
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = 'https://s0.wp.com/wp-content/plugins/custom-fonts/js/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+	})();
+</script><style id="jetpack-custom-fonts-css"></style>
+<meta name='robots' content='max-image-preview:large' />
+
+<!-- Async WordPress.com Remote Login -->
+<script id="wpcom_remote_login_js">
+var wpcom_remote_login_extra_auth = '';
+function wpcom_remote_login_remove_dom_node_id( element_id ) {
+	var dom_node = document.getElementById( element_id );
+	if ( dom_node ) { dom_node.parentNode.removeChild( dom_node ); }
+}
+function wpcom_remote_login_remove_dom_node_classes( class_name ) {
+	var dom_nodes = document.querySelectorAll( '.' + class_name );
+	for ( var i = 0; i < dom_nodes.length; i++ ) {
+		dom_nodes[ i ].parentNode.removeChild( dom_nodes[ i ] );
+	}
+}
+function wpcom_remote_login_final_cleanup() {
+	wpcom_remote_login_remove_dom_node_classes( "wpcom_remote_login_msg" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_validate" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_js" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_iframe" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_styles" );
+}
+
+// Watch for messages back from the remote login
+window.addEventListener( "message", function( e ) {
+	if ( e.origin === "https://r-login.wordpress.com" ) {
+		var data = {};
+		try {
+			data = JSON.parse( e.data );
+		} catch( e ) {
+			wpcom_remote_login_final_cleanup();
+			return;
+		}
+
+		if ( data.msg === 'LOGIN' ) {
+			// Clean up the login check iframe
+			wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+
+			var id_regex = new RegExp( /^[0-9]+$/ );
+			var token_regex = new RegExp( /^.*|.*|.*$/ );
+			if (
+				token_regex.test( data.token )
+				&& id_regex.test( data.wpcomid )
+			) {
+				// We have everything we need to ask for a login
+				var script = document.createElement( "script" );
+				script.setAttribute( "id", "wpcom_remote_login_validate" );
+				script.src = '/remote-login.php?wpcom_remote_login=validate'
+					+ '&wpcomid=' + data.wpcomid
+					+ '&token=' + encodeURIComponent( data.token )
+					+ '&host=' + window.location.protocol
+						+ '//' + window.location.hostname;
+				document.body.appendChild( script );
+			}
+
+			return;
+		}
+
+		// Safari ITP, not logged in, so redirect
+		if ( data.msg === 'LOGIN-REDIRECT' ) {
+			window.location = 'https://wordpress.com/log-in?redirect_to=' + window.location.href;
+			return;
+		}
+
+		// Safari ITP, storage access failed, remove the request
+		if ( data.msg === 'LOGIN-REMOVE' ) {
+			var css_zap = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } @media screen and ( max-width: 782px ) { html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } }';
+			var style_zap = document.createElement( 'style' );
+			style_zap.type = 'text/css';
+			style_zap.appendChild( document.createTextNode( css_zap ) );
+			document.body.appendChild( style_zap );
+
+			var e = document.getElementById( 'wpcom_request_access_iframe' );
+			e.parentNode.removeChild( e );
+
+			document.cookie = 'wordpress_com_login_access=denied; path=/; max-age=31536000';
+
+			return;
+		}
+
+		// Safari ITP
+		if ( data.msg === 'REQUEST_ACCESS' ) {
+			console.log( 'request access: safari' );
+
+			// Check ITP iframe enable/disable knob
+			if ( wpcom_remote_login_extra_auth !== 'safari_itp_iframe' ) {
+				return;
+			}
+
+			// If we are in a "private window" there is no ITP.
+			var private_window = false;
+			try {
+				var opendb = window.openDatabase( null, null, null, null );
+			} catch( e ) {
+				private_window = true;
+			}
+
+			if ( private_window ) {
+				console.log( 'private window' );
+				return;
+			}
+
+			var iframe = document.createElement( 'iframe' );
+			iframe.id = 'wpcom_request_access_iframe';
+			iframe.setAttribute( 'scrolling', 'no' );
+			iframe.setAttribute( 'sandbox', 'allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-top-navigation-by-user-activation' );
+			iframe.src = 'https://r-login.wordpress.com/remote-login.php?wpcom_remote_login=request_access&origin=' + encodeURIComponent( data.origin ) + '&wpcomid=' + encodeURIComponent( data.wpcomid );
+
+			var css = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 46px !important; } * html body { margin-top: 46px !important; } @media screen and ( max-width: 660px ) { html { margin-top: 71px !important; } * html body { margin-top: 71px !important; } #wpcom_request_access_iframe { display: block; height: 71px !important; } } #wpcom_request_access_iframe { border: 0px; height: 46px; position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; z-index: 99999; background: #23282d; } ';
+
+			var style = document.createElement( 'style' );
+			style.type = 'text/css';
+			style.id = 'wpcom_request_access_styles';
+			style.appendChild( document.createTextNode( css ) );
+			document.body.appendChild( style );
+
+			document.body.appendChild( iframe );
+		}
+
+		if ( data.msg === 'DONE' ) {
+			wpcom_remote_login_final_cleanup();
+		}
+	}
+}, false );
+
+// Inject the remote login iframe after the page has had a chance to load
+// more critical resources
+window.addEventListener( "DOMContentLoaded", function( e ) {
+	var iframe = document.createElement( "iframe" );
+	iframe.style.display = "none";
+	iframe.setAttribute( "scrolling", "no" );
+	iframe.setAttribute( "id", "wpcom_remote_login_key" );
+	iframe.src = "https://r-login.wordpress.com/remote-login.php"
+		+ "?wpcom_remote_login=key"
+		+ "&origin=aHR0cHM6Ly9hbmdvbGQ0LmNvbQ%3D%3D"
+		+ "&wpcomid=188722040"
+		+ "&time=1622717646";
+	document.body.appendChild( iframe );
+}, false );
+</script>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//angold4.wordpress.com' />
+<link rel="alternate" type="application/rss+xml" title="angold4.com &raquo; Feed" href="https://angold4.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="angold4.com &raquo; Comments Feed" href="https://angold4.com/comments/feed/" />
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+			<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/s0.wp.com\/wp-includes\/js\/wp-emoji-release.min.js?m=1612197847h&ver=5.7.2"}};
+			!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([55357,56424,8205,55356,57212],[55357,56424,8203,55356,57212])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='all-css-0-1' href='https://s0.wp.com/_static/??-eJytkUFOAzEMRS9ExkxpQV0gzpJkrOASJ1HstJrbk5kWVFUIumBjyY7fl38+nIrxOSkmBW6mxBYoCZyKz2yEKeJ80w1e5AGusC8mtN46rKG/VITj+Djshi24RnECF7P/MJFctXUG0TnifwjpO/I9QislcEAtdsHtnJuaUGm6+5YbiWqVUpA/cJ8v2GboLkaYSPR7aH5mr2JY/Pc5F6vLBuNEFmO3nPQ37JyXc6WiiOmVqbFZ/2qN741fx+dxv9087V72h08/NL93?cssminify=yes' type='text/css' media='all' />
+<style id='wp-block-library-inline-css'>
+.has-text-align-justify {
+	text-align:justify;
+}
+</style>
+<link rel='stylesheet' id='print-css-1-1' href='https://s0.wp.com/wp-content/themes/pub/varia/print.css?m=1571655471h&cssminify=yes' type='text/css' media='print' />
+<link rel='stylesheet' id='all-css-2-1' href='https://s0.wp.com/_static/??-eJx9j8EKwzAMQ39omUlXutPYt6TBy1wSOyROy/5+gV0KK71J8CQk2LLxwoqsoG9MWCG3GQqtxEGFoeon4tXXeoFjdHWFHBD7H2q27CX9BVIzObZAXCGgmCjeKfX6vTGv6KicRQvOUUKXATq1s2cDD74808NOdhzG+3CzyxdDiWD6?cssminify=yes' type='text/css' media='all' />
+<style id='jetpack-global-styles-frontend-style-inline-css'>
+:root { --font-headings: unset; --font-base: unset; --font-headings-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; --font-base-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+</style>
+<link rel='stylesheet' id='all-css-4-1' href='https://s0.wp.com/wp-content/themes/h4/global.css?m=1420737423h&cssminify=yes' type='text/css' media='all' />
+<script id='wpcom-actionbar-placeholder-js-extra'>
+var actionbardata = {"siteID":"188722040","siteName":"angold4.com","siteURL":"https:\/\/angold4.com","icon":"<img alt='' src='https:\/\/angold4.files.wordpress.com\/2021\/01\/all_love_back.gif-pixilart.gif?w=50' class='avatar avatar-50' height='50' width='50' \/>","canManageOptions":"","canCustomizeSite":"","isFollowing":"","themeSlug":"pub\/rivington","signupURL":"https:\/\/wordpress.com\/start\/","loginURL":"https:\/\/wordpress.com\/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fangold4.com%252F2021%252F06%252F03%252Fassembly-language%252F","themeURL":"https:\/\/wordpress.com\/theme\/rivington\/","xhrURL":"https:\/\/angold4.com\/wp-admin\/admin-ajax.php","nonce":"e981723e50","isSingular":"","isFolded":"","isLoggedIn":"","isMobile":"","subscribeNonce":"<input type=\"hidden\" id=\"_wpnonce\" name=\"_wpnonce\" value=\"7cf692ab5c\" \/>","referer":"https:\/\/angold4.com\/blog\/","canFollow":"1","feedID":"113654237","statusMessage":"","customizeLink":"https:\/\/angold4.wordpress.com\/wp-admin\/customize.php?url=https%3A%2F%2Fangold4.wordpress.com%2Fblog%2F","i18n":{"view":"View site","follow":"Follow","following":"Following","edit":"Edit","login":"Log in","signup":"Sign up","customize":"Customise","report":"Report this content","themeInfo":"Get theme: Rivington","shortlink":"Copy shortlink","copied":"Copied","followedText":"New posts from this site will now appear in your <a href=\"https:\/\/wordpress.com\/read\">Reader<\/a>","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","editSubs":"Manage subscriptions","viewReader":"View site in Reader","viewReadPost":"View post in Reader","subscribe":"Sign me up","enterEmail":"Enter your email address","followers":"","alreadyUser":"Already have a WordPress.com account? <a href=\"https:\/\/wordpress.com\/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fangold4.com%252F2021%252F06%252F03%252Fassembly-language%252F\">Log in now.<\/a>","stats":"Statistics"}};
+</script>
+<script crossorigin='anonymous' type='text/javascript' src='https://s0.wp.com/_static/??/wp-content/js/postmessage.js,/wp-content/js/mobile-useragent-info.js,/wp-content/js/rlt-proxy.js?m=1617313679j'></script>
+<script type='text/javascript'>
+	window.addEventListener( 'DOMContentLoaded', function() {
+		rltInitialize( {"token":null,"iframeOrigins":["https:\/\/widgets.wp.com"]} );
+	} );
+</script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://angold4.wordpress.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://s0.wp.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress.com" />
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="angold4.com" />
+<meta property="og:description" content="Angold Dmitry&#039;s Blog" />
+<meta property="og:url" content="https://angold4.com/blog/" />
+<meta property="og:site_name" content="angold4.com" />
+<meta property="og:image" content="https://angold4.files.wordpress.com/2021/01/all_love_back.gif-pixilart.gif?w=100" />
+<meta property="og:image:width" content="200" />
+<meta property="og:image:height" content="200" />
+<meta property="og:locale" content="en_GB" />
+<meta name="twitter:site" content="@wordpressdotcom" />
+
+<!-- End Jetpack Open Graph Tags -->
+<link rel="search" type="application/opensearchdescription+xml" href="https://angold4.com/osd.xml" title="angold4.com" />
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com" />
+<meta name="application-name" content="angold4.com" /><meta name="msapplication-window" content="width=device-width;height=device-height" /><meta name="msapplication-tooltip" content="Angold Dmitry&#039;s Blog" /><meta name="msapplication-task" content="name=Subscribe;action-uri=https://angold4.com/feed/;icon-uri=https://angold4.files.wordpress.com/2021/01/all_love_back.gif-pixilart.gif?w=16" /><meta name="msapplication-task" content="name=Sign up for a free blog;action-uri=http://wordpress.com/signup/;icon-uri=https://s0.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=WordPress.com Support;action-uri=http://support.wordpress.com/;icon-uri=https://s0.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=WordPress.com Forums;action-uri=http://forums.wordpress.com/;icon-uri=https://s0.wp.com/i/favicon.ico" /><meta name="description" content="Angold Dmitry&#039;s Blog" />
+<!-- There is no amphtml version available for this URL. --><link rel="icon" href="https://angold4.files.wordpress.com/2021/01/all_love_back.gif-pixilart.gif?w=32" sizes="32x32" />
+<link rel="icon" href="https://angold4.files.wordpress.com/2021/01/all_love_back.gif-pixilart.gif?w=100" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://angold4.files.wordpress.com/2021/01/all_love_back.gif-pixilart.gif?w=100" />
+<meta name="msapplication-TileImage" content="https://angold4.files.wordpress.com/2021/01/all_love_back.gif-pixilart.gif?w=100" />
+</head>
+
+<body class="blog wp-embed-responsive customizer-styles-applied hfeed image-filters-enabled hide-homepage-title mobile-nav-side highlander-enabled highlander-dark">
+
+
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	
+<header id="masthead" class="site-header responsive-max-width has-title-and-tagline has-menu" role="banner">
+	<div class="site-branding">
+
+								<p class="site-title"><a href="https://angold4.com/" rel="home">angold4.com</a></p>
+			
+				<p class="site-description">
+				Angold Dmitry&#039;s Blog			</p>
+	</div><!-- .site-branding -->
+		<nav id="site-navigation" class="main-navigation" aria-label="Main Navigation">
+		<input type="checkbox" role="button" aria-haspopup="true" id="toggle" class="hide-visually">
+		<label for="toggle" id="toggle-menu" class="button">
+			Menu			<span class="dropdown-icon open">+</span>
+			<span class="dropdown-icon close">&times;</span>
+			<span class="hide-visually expanded-text">expanded</span>
+			<span class="hide-visually collapsed-text">collapsed</span>
+		</label>
+		<div class="main-menu"><ul>
+<li class="page_item page-item-216"><a href="About.html">About</a></li>
+<li class="page_item page-item-6 current_page_item"><a href="Blog.html" aria-current="page">Blog</a></li>
+<li class="page_item page-item-7"><a href="Contact.html">Contact Me</a></li>
+<li class="page_item page-item-168"><a href="Index.html">Index</a></li>
+</ul></div>
+	</nav><!-- #site-navigation -->
+</header><!-- #masthead -->
+
+	<div id="content" class="site-content">
+
+	<section id="primary" class="content-area">
+		<main id="main" class="site-main">
+
+		
+<article id="post-201" class="post-201 post type-post status-publish format-standard hentry category-uncategorised entry">
+	<header class="entry-header responsive-max-width">
+		<h2 class="entry-title"><a href="https://angold4.com/2021/06/03/assembly-language/" rel="bookmark">Assembly Language</a></h2>	</header><!-- .entry-header -->
+
+	
+	<div class="entry-content">
+		
+<div class="wp-block-jetpack-markdown"><h3>C &#8211;&gt; Assembly</h3>
+<p><strong>There are two ways to read Codes from C to Assembly:&lt;br&gt;</strong>
+<strong>We Use This Test.c file to Test:</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    printf(&quot;Hello, World!&quot;);
+    return 0;
+}
+
+</code></pre>
+<ul>
+<li><strong>gcc -S:</strong>&lt;br&gt;
+<code>✗ gcc -Og -S test.c</code>&lt;br&gt;<strong>Then gcc will generate a file called test.s:(-Og means Optimization)</strong>&lt;br&gt;</li>
+</ul>
+<pre><code class="language-assembly">## test.s
+	.section	__TEXT,__text,regular,pure_instructions
+	.build_version macos, 10, 14	sdk_version 10, 14
+	.globl	_main                   ## -- Begin function main
+	.p2align	4, 0x90
+_main:                                  ## @main
+	.cfi_startproc
+## %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	leaq	L_.str(%rip), %rdi
+	xorl	%eax, %eax
+	callq	_printf
+	xorl	%eax, %eax
+	popq	%rbp
+	retq
+	.cfi_endproc
+                                        ## -- End function
+	.section	__TEXT,__cstring,cstring_literals
+L_.str:                                 ## @.str
+	.asciz	&quot;Hello, World!&quot;
+
+
+.subsections_via_symbols
+
+</code></pre>
+<ul>
+<li><strong>objdump:</strong>&lt;br&gt;</li>
+</ul>
+<pre><code>✗ gcc -Og -c test.c
+
+test.o:	file format Mach-O 64-bit x86-64
+
+Disassembly of section __TEXT,__text:
+_main:
+       0:	55 	pushq	%rbp
+       1:	48 89 e5 	movq	%rsp, %rbp
+       4:	48 8d 3d 0b 00 00 00 	leaq	11(%rip), %rdi
+       b:	31 c0 	xorl	%eax, %eax
+       d:	e8 00 00 00 00 	callq	0 &lt;_main+0x12&gt;
+      12:	31 c0 	xorl	%eax, %eax
+      14:	5d 	popq	%rbp
+      15:	c3 	retq
+
+</code></pre>
+<h3>Access Information</h3>
+<p><strong>An x86-64 CPU contains a set of 16 general-purpose registers that store 64-bit values&lt;br&gt;</strong></p>
+<pre><code class="language-assembly">## This is a list for these 16 general-purpose reigsters:
+
+64    32     16     8
+%rax  %eax   %ax    %al
+%rbx  %ebx   %bx    %bl
+%rcx  %ecx   %cx    %cl
+%rdx  %edx   %dx    %dl
+%rsi  %esi   %si    %sil
+%rdi  %edi   %di    %dil
+%rbp  %ebp   %bp    %bpl
+%rsp  %esp   %sp    %spl
+%r8   %r8d   %r8w   %r8b
+%r9   %r9d   %r9w   %r9b
+%r10  %r10d  %r10w  %r10b
+%r11  %r11d  %r11w  %r11b
+%r12  %r12d  %r12w  %r12b
+%r13  %r13d  %r13w  %r13b
+%r14  %r14d  %r14w  %r14b
+%r15  %r15d  %r15w  %r15b
+</code></pre>
+<h4>Common Operands in Assembly Language</h4>
+<p><strong>3-Normal-Operands:</strong></p>
+<pre><code>1.immediate:
+e.g: $-577 --&gt; int -577, $0x1F --&gt; A Hex 0x1F
+
+2.regster:
+e.g: %rax --&gt; the Value in Regster %rax
+
+3.storage:
+e.g: 0x1F --&gt; the Value in Storage 0x1F
+</code></pre>
+<p><strong>2-Addressing Mode</strong></p>
+<pre><code>For Example:
+
+register:  value:
+%rax       0x100
+%rcx       0x1
+%rdx       0x3
+
+storage:   value:
+0x100      0xFF
+0x104      0xAB
+0x108      0x13
+0x10C      0x11
+
+1.indexed addressing:
+e.g: (%rax) --&gt; the Value in Storage the Value in Regster %rax --&gt; 0xFF
+e.g: 4(%rax) --&gt; the Value in Storage 4 * the Value in Regster %rax --&gt; 0xAB
+e.g: 260(%rcx,%rdx) --&gt; the Value in Storage 260 + the Value in Regster %rcx, %rdx --&gt; (0x104+0x1+0x3) = (0x108) = 0x13
+
+2.proportion indexed addressing:
+e.g: 0xFC(,%rcx,4) --&gt; the Value in Storage 0xFC + 4*the Value in Regster %rcx --&gt; (0xFC + 4x1) = (0x100) = 0xFF
+e.g: (%rax,%rcx,4) --&gt; the Value in Storage the Value in Regster %rax + 4*the Value in Regster %rcx --&gt; (0x100 + 4*0x1) = 0x11 
+</code></pre>
+<h4>&#8216;mov&#8217; in Assembly Language</h4>
+<p><strong>The mov instruction copies the data to the specified location</strong></p>
+<h5>mov</h5>
+<pre><code class="language-assembly">movl $0x4050,%eax        Immediate--&gt;Register  4bytes
+movw %bp,%sp             Register--&gt;Register   2bytes
+movb (%rdi,%rcx),%al     Memory--&gt;Register     1byte
+movb $-17,(%rsp)         Immediate--&gt;Memory    1byte
+movq %rax,-12(%rbp)      Register--&gt;Memory     8bytes
+
+</code></pre>
+<h5>movz</h5>
+<p><strong>Move from smaller storage units to larger storage units&lt;br&gt;Fill the remaining byte(s) in the destination with 0</strong></p>
+<pre><code class="language-assembly">movzbw $0xF0,%ax     In ax register: 0x00F0
+</code></pre>
+<h5>movs</h5>
+<p><strong>Move from smaller storage units to larger storage units&lt;br&gt;Fill the remaining byte(s) in the destination with Sign bit(Just as mov)</strong></p>
+<pre><code class="language-assembly">movsbw $0xF0,%ax     In ax register: 0xFFF0
+</code></pre>
+<h5>More Examples:</h5>
+<pre><code class="language-assembly">movabsq $0x0011223344556677, %rax    ## %rax = 0011223344556677
+movb    $-1, %al                     ## %rax = 00112233445566FF
+movw    $-1, %ax                     ## %rax = 001122334455FFFF
+movl    $-1, %eax                    ## %rax = 00000000FFFFFFFF
+movq    $-1, %rax                    ## %rax = FFFFFFFFFFFFFFFF
+</code></pre>
+<pre><code class="language-assembly">movabsq $0x0011223344556677, %rax    ## %rax = 0011223344556677
+movb    $0xAA, %dl                   ## %dl = AA
+movb    %dl, %al                     ## %rax = 00112233445566AA
+movsbq  %dl, %rax                    ## %rax = FFFFFFFFFFFFFFAA
+movzbq  %dl, %rax                    ## %rax = 00000000000000AA
+</code></pre>
+<h5>Practice:</h5>
+<pre><code class="language-c">src_t  *sp;
+dest_t *dp;
+/*
+Assume that src_t and dest_t were typedef (Some Types of numbers)
+Here We need to Use suitable Assembly language to Achieve:
+(Supposed that the value of sp and dp are stored in %rdi and %rsi)
+*/
+*dp = (dest_t) *sp
+</code></pre>
+<pre><code class="language-assembly">src_t          dest_t          Command               Note
+long           long            movq(%rdi),%rax       NaN
+                               movq %rax,(%rsi)
+
+char           int             movsbl(%rdi),%eax     ## If We don't move a Unsigned number.
+                               movl %eax, (%rsi)     ## We need to use 'movs'
+
+char           unsigned        movsbl(%rdi),%eax     ## That is because In C programming Language
+                               movl %eax, (%rsi)     ## If Cast type Change both the sign and the size
+                                                     ## C Usually Change the Size first
+
+unsigned char  long            movzbl(%rdi),%eax     ## If We need to move a Unsigned number.
+                               movl %eax, (%rsi)     ## We need to use 'movz'
+
+int            char            movl (%rdi),%eax      ## If We move a number from Large Size to Small Size
+                               movb %al, (%rsi)      ## Move all to the register first, than move the least significant byte of the Small Size
+
+unsigned       unsigned char   movl (%rdi),%eax      NaN
+                               movb %al, (%rsi)
+
+char           short           movzbw (%rdi),%ax     NaN
+                               movw %ax, (%rsi)
+</code></pre>
+<h4>Assembly with C Pointer</h4>
+<p><strong>Let&#8217;s see this C Function exchange</strong></p>
+<pre><code class="language-c">// long.c
+1 long exchange(long *xp, long y)
+2 {
+3     long x = *xp;
+4     *xp = y;
+5     return x;
+6 }
+
+</code></pre>
+<p><strong>When We Compile it&#8230; <code>gcc -Og -S long.c</code></strong></p>
+<pre><code class="language-assembly">## long.s
+_exchange:                             
+
+1   pushq	%rbp
+2   movq	%rsp, %rbp
+
+3   movq	(%rdi), %rax
+4   movq	%rsi, (%rdi)
+
+5   popq	%rbp
+6   retq
+
+</code></pre>
+<ul>
+<li><strong>We Can See that in Assembly (long.s): Line3 and Line4 are correspond to Line3 and Line4 in long.c</strong></li>
+<li><strong>a pointer <code>*xp</code> in Assembly language is correspond to a register with <code>()</code>Opreation</strong></li>
+</ul>
+</div>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer responsive-max-width">
+		<span class="byline"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Posted by</span><span class="author vcard"><a class="url fn n" href="https://angold4.com/author/angold4/">angold4</a></span></span><span class="posted-on"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><path id="a" d="M0 0h24v24H0V0z"></path></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"></use></clipPath><path clip-path="url(#b)" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"></path></svg><a href="https://angold4.com/2021/06/03/assembly-language/" rel="bookmark"><time class="entry-date published updated" datetime="2021-06-03T17:59:32+08:00">3rd Jun 2021</time></a></span><span class="cat-links"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Posted in</span><a href="https://angold4.com/category/uncategorised/" rel="category tag">Uncategorized</a></span><span class="comments-link"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><a href="https://angold4.com/2021/06/03/assembly-language/#respond">Leave a comment<span class="screen-reader-text"> on Assembly Language</span></a></span>	</footer><!-- .entry-footer -->
+</article><!-- #post-${ID} -->
+
+<article id="post-193" class="post-193 post type-post status-publish format-standard hentry category-uncategorised entry">
+	<header class="entry-header responsive-max-width">
+		<h2 class="entry-title"><a href="https://angold4.com/2021/06/03/dragon-fly/" rel="bookmark">Dragon Fly</a></h2>	</header><!-- .entry-header -->
+
+	
+	<div class="entry-content">
+		
+<div class="wp-block-jetpack-markdown"><h5>About &quot;The Dragon Book&quot; About &quot;The Compiler&quot;&#8230;</h5>
+<h2>A Complete Front End</h2>
+<h5>Based on Chapter1-Chapter2 and Pg.965-987 of &quot;The Dragon Book&quot;</h5>
+<h5>Check the Source Code at <a href="https://github.com/Angorithm4/Dragonfly">github@Angorithm4.DragonFly</a></h5>
+<h3>Compile it</h3>
+<pre><code>$ javac lexer/*.java
+$ javac symbols/*.java
+$ javac inter/*.java
+$ javac parser/*.java
+$ javac main/*.java
+</code></pre>
+<h3>Run it</h3>
+<pre><code>$ java main.Main &lt; YOURFILE.txt
+</code></pre>
+<h3>Example</h3>
+<pre><code>// test.txt
+{
+    int i; int j; float v; float x; float[100] a;
+    j = 100;
+    v = 0.78;
+    while( true ) {
+        i = i + 1;
+        j = j + v;
+        if( i &gt;= j ) break;
+    }
+
+    do {i = i - 1;} while ( a[i] &lt; v );
+
+}
+</code></pre>
+<h3>Output</h3>
+<pre><code>$ java main.Main &lt; test/test.txt
+L1:     j = 100
+L3:     v = 0.78
+L4:L6:  i = i + 1
+L7:     j = j + v
+L8:     iffalse i &gt;= j goto L4
+L9:     goto L5
+        goto L4
+L5:     i = i - 1
+L10:    t1 = i * 8
+        t2 = a[t1]
+        if t2 &lt; v goto L5
+L2:
+</code></pre>
+</div>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer responsive-max-width">
+		<span class="byline"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Posted by</span><span class="author vcard"><a class="url fn n" href="https://angold4.com/author/angold4/">angold4</a></span></span><span class="posted-on"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><path id="a" d="M0 0h24v24H0V0z"></path></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"></use></clipPath><path clip-path="url(#b)" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"></path></svg><a href="https://angold4.com/2021/06/03/dragon-fly/" rel="bookmark"><time class="entry-date published" datetime="2021-06-03T17:47:13+08:00">3rd Jun 2021</time><time class="updated" datetime="2021-06-03T17:54:42+08:00">3rd Jun 2021</time></a></span><span class="cat-links"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Posted in</span><a href="https://angold4.com/category/uncategorised/" rel="category tag">Uncategorized</a></span><span class="comments-link"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><a href="https://angold4.com/2021/06/03/dragon-fly/#respond">Leave a comment<span class="screen-reader-text"> on Dragon Fly</span></a></span>	</footer><!-- .entry-footer -->
+</article><!-- #post-${ID} -->
+
+<article id="post-61" class="post-61 post type-post status-publish format-standard hentry category-uncategorised entry">
+	<header class="entry-header responsive-max-width">
+		<h2 class="entry-title"><a href="https://angold4.com/2021/02/01/sigreturn-oriented-programming-attack/" rel="bookmark">Sigreturn Oriented Programming&nbsp;Attack</a></h2>	</header><!-- .entry-header -->
+
+	
+	<div class="entry-content">
+		
+<p>by Angold Dmitry</p>
+
+
+
+<p><strong>This is my Notes for This Paper : <a href="http://www.ieee-security.org/TC/SP2014/papers/FramingSignals-AReturntoPortableShellcode.pdf">Framing Signals — A Return to Portable Shellcode</a></strong> <strong>Which Won the <a href="http://www.ieee-security.org/TC/SP2014/donors.html">Best Student Paper</a> in 35th IEEE Symposium on Security and Privacy. 2014</strong></p>
+
+
+
+<h3>1.Return Oriented Programming Attack</h3>
+
+
+
+<p></p>
+
+
+
+<h4><a href="https://en.wikipedia.org/wiki/Executable_space_protection#Windows">Data Execution Protection(DEP)</a></h4>
+
+
+
+<p><strong>In computer security, executable-space protection marks memory regions as non-executable, such that an attempt to execute machine code in these regions will cause an exception.</strong></p>
+
+
+
+<h4><a href="https://en.wikipedia.org/wiki/Address_space_layout_randomization">Address Space Layout Randomisation(ASLR)</a></h4>
+
+
+
+<p><strong>Address space layout randomisation (ASLR) is a computer security technique involved in preventing exploitation of memory corruption vulnerabilities. In order to prevent an attacker from reliably jumping to, for example, a particular exploited function in memory, ASLR randomly arranges the address space positions of key data areas of a process, including the base of the executable and the positions of the stack, heap and libraries.</strong></p>
+
+
+
+<h4><a href="https://github.com/Angold-4/Angold4-CSAPP/blob/master/ChapterNotes/Chapter3/canary.md">Stack Destruction Detection(SDD)</a></h4>
+
+
+
+<p><strong>Canary is a Test area in Stack. Which helps to avoid Stack Overflow</strong>&nbsp;<strong>Although The Stack Randomization(ASLR) Can counter some forms of attack</strong></p>
+
+
+
+<p><strong>Random loss to brute force</strong> You will never know what the power of attacker</p>
+
+
+
+<p><strong>Let’s see a normal stack:</strong></p>
+
+
+
+<pre class="wp-block-code"><code>-------------------------------------
+|                                   |
+|___________________________________| --&gt; Caller's shallow frame
+|          Return address           |
+-------------------------------------
+|                                   |
+|                                   | --&gt; Buffer
+|___________________________________|
+|             Canary                |
+------------------------------------- --&gt; buf = %rsp</code></pre>
+
+
+
+<p><strong>Store a special Canary Value between any local buffer and the Caller’s shallow frame</strong> <strong>Let’s see an example to figure out that:</strong></p>
+
+
+<div class="wp-block-syntaxhighlighter-code "><pre class="brush: cpp; title: ; notranslate" title="">
+/*echo.c*/
+#include &lt;stdio.h&gt;
+
+void echo(){
+    char buf&#91;8];
+    gets(buf);
+    puts(buf);
+}
+After we compile it:
+
+## echo.s
+_echo:                                  ## @echo
+	.cfi_startproc
+## %bb.0:
+	pushq	%rbp
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	pushq	%rbx
+	subq	$24, %rsp
+	.cfi_offset %rbx, -24
+	movq	___stack_chk_guard@GOTPCREL(%rip), %rax
+	movq	(%rax), %rax
+	movq	%rax, -16(%rbp)
+	leaq	-24(%rbp), %rbx
+	movq	%rbx, %rdi
+	callq	_gets
+	movq	%rbx, %rdi
+	callq	_puts
+	movq	___stack_chk_guard@GOTPCREL(%rip), %rax
+	movq	(%rax), %rax
+	cmpq	-16(%rbp), %rax
+	jne	LBB0_2
+## %bb.1:
+	addq	$24, %rsp
+	popq	%rbx
+	popq	%rbp
+	retq
+LBB0_2:
+	callq	___stack_chk_fail
+                                        ## -- End function
+</pre></div>
+
+
+<p><strong>We can find that in line 11 at echo.s:&nbsp;<code>movq stack_chk_guard@GOTPCREL(%rip), %rax</code></strong>&nbsp;<strong>It is like we create a special position pointer and mov it to %rax(This Special area is Marked as Read-Only)</strong>&nbsp;<strong>In the next line We move the value into %rax and this value is Canary</strong></p>
+
+
+
+<p><strong>Before the function <code>puts()</code> return. The gcc will check the Value of Canary’s position whether it is as same as the Value store in The Special position pointer(In Line 20)</strong> <strong>If not equal(<code>jne</code>). Jump to LBB0_2(last line) and cause <code>stack_chk_fail</code></strong></p>
+
+
+
+<p></p>
+
+
+
+<h3>Return Oriented Programming Attack</h3>
+
+
+
+<p><strong>Because of These Defences. The earliest code injection attacks are basically unusable in current operating systems, ROP appeared</strong></p>
+
+
+
+<p><strong>The main idea of ROP is that the attacker does not need to inject code himself (because the injected code is not executable under the protection of DEP), but uses the existing code fragments of the system to construct the attack. It is called ROP here because the way it changes the control flow is to use the return instruction in the system (such as&nbsp;<code>ret</code>&nbsp;in x86).</strong></p>
+
+
+
+<p><strong>For Example:</strong></p>
+
+
+
+<p><strong>Here is a simple example to illustrate how to use ROP to implement a memory assignment statement:</strong></p>
+
+
+<div class="wp-block-syntaxhighlighter-code "><pre class="brush: plain; title: ; notranslate" title="">
+Mem&#91;v2] = v1
+</pre></div>
+
+
+<p><strong>Which assembly code is:</strong></p>
+
+
+<div class="wp-block-syntaxhighlighter-code "><pre class="brush: plain; title: ; notranslate" title="">
+mov %eax v1;
+mov %ebx v2;
+mov &#91;%ebx], %eax
+</pre></div>
+
+
+<p><strong>We can achieve that Statement by using ROP:</strong></p>
+
+
+<div class="wp-block-syntaxhighlighter-code "><pre class="brush: plain; title: ; notranslate" title="">
+-------------------------------------
+|               addr3               |
+|                v2                 | 
+|               addr2               |  --&gt; Stack
+|                v1                 |
+|               addr1               |
+-------------------------------------
+
+</pre></div>
+
+<div class="wp-block-syntaxhighlighter-code "><pre class="brush: plain; title: ; notranslate" title="">
+-------------------------------------
+addr1: pop %eax; ret                |
+addr2: pop %ebx; ret                |  --&gt; Memory
+addr3: mov &#91;%ebx]; %eax;            |
+-------------------------------------
+</pre></div>
+
+
+<p><strong>Among them,&nbsp;<code>addr1</code>,&nbsp;<code>addr2</code>, and&nbsp;<code>addr3</code>&nbsp;are the memory addresses of the corresponding instructions. We call each line a &#8220;gadget&#8221;. The same effect as the compilation above can be achieved by constructing the data on the stack as shown in the figure above.</strong></p>
+
+
+
+<p><strong>Before trying to understand The Detail of ROP. We need to understand the Core of ROP:</strong>&nbsp;<strong>When ASLR and DEP are turned on, the memory location of the program will change every time the program is executed and the executable location cannot be written, and the writeable location cannot be executed, so try to combine the original fragments of the program to form a meaningful attack process.</strong></p>
+
+
+
+<p><strong>The small fragments of these programs are called gadgets, such as pop eax; ret; fragments, these fragments mostly exist at the end of the function (because there is ret), you can use tools to find available gadgets</strong></p>
+
+
+
+<p></p>
+
+
+
+<h4>The Core of ROP</h4>
+
+
+
+<p><strong>As we mentioned before: Because of ASLR and DEP. The Program which is executable cannot be written, and the Program which is writeable cannot be executed.</strong>&nbsp;<strong>If The Attack wants to run his attack program in a computer. The ROP attack need to modify the writeable program(Stack) to control the executable program(Code)</strong></p>
+
+
+
+<p><strong>And the Only Way Link Between Stack and Code is&nbsp;<code>ret</code>&nbsp;in x86</strong></p>
+
+
+
+<p><strong>Procedure:</strong></p>
+
+
+
+<ul><li><strong>First. The Attacker need to find a buffer overflow loophole</strong> <img width="718" height="597" src="https://i1.wp.com/image-angold4.test.upcdn.net/stackbufferoverflow1.png" alt="stackbufferoverflow1"></li><li><strong>Then. It is very important and troublesome to distribute all gadgets in memory and stack(One to one correspondence)</strong> <img width="718" height="720" src="https://i2.wp.com/image-angold4.test.upcdn.net/stackbufferoverflow2.png" alt="stackbufferoverflow2"></li><li><strong>Last. Call the Program which have a buffer overflow loophole. and Execute it&lt;br&gt;When overflow. The return addr is addr1. and the Kernel will execute addr1 code in memory and so on automatically.</strong> <img width="718" height="659" src="https://i2.wp.com/image-angold4.test.upcdn.net/stackbufferoverflow3.png" alt="stackbufferoverflow3"> <strong>That makes the attacker can run his attack code in target computer</strong></li></ul>
+
+
+
+<p><strong>Although it will works sometimes. But ASLR makes this work harder.</strong> <strong>And for an attacker, he needs to carefully construct a large number of gadgets separately to attack each different application, which also makes the reusability of ROP very poor.</strong></p>
+
+
+
+<p></p>
+
+
+
+<h2>2. Sigreturn Oriented Programming Attack</h2>
+
+
+
+<p><strong>Here&nbsp;<code>sigreturn</code>&nbsp;is a system call, it will be called indirectly when a signal occurs in the unix system</strong>&nbsp;<strong>Before starting to introduce the attack principle of SROP. Let’s introduce&nbsp;<code>signal</code>. Which is a system call in Unix-like system:</strong></p>
+
+
+
+<h3>Signal in Unix-like System</h3>
+
+
+
+<p><strong>Signal handling has been an integral part of UNIX (and UNIX-like) systems ever since the very first implementation by Dennis Ritchie in the early 1970s.</strong></p>
+
+
+
+<blockquote class="wp-block-quote"><p><strong>Signals are an extremely powerful mechanism to deliver asynchronous notifications directly to a process or thread. They are used to kill processes, to tell them that timers have expired, or to notify them about exceptional behavior. The UNIX design has spawned a plethora of UNIX-like “children” of which GNU Linux, several flavours of BSD, Android, iOS/Mac OS X, and Solaris are perhaps the best known ones in active use today. While each flavor handles signals in slightly different ways, the different implementations are all very similar.</strong></p></blockquote>
+
+
+
+<ul><li><strong>As shown in the figure below, when the kernel delivers a signal to a process, the process will be temporarily suspended and enter the kernel(1)</strong>&nbsp;<img src="https://i0.wp.com/image-angold4.test.upcdn.net/deliver.png" alt="deliver" width="718" height="214"></li><li><strong>Then the kernel saves the corresponding context for the process and jumps to the previously registered signal handler to process the corresponding signal(2)</strong></li><li><strong>When the signal handler returns (3), the kernel restores the previously saved context for the process</strong>&lt;br&gt;</li><li><strong>The execution of the final recovery process (4)</strong></li></ul>
+
+
+
+<p><strong>In the four-step process, the third step is the key:</strong>&nbsp;<strong>How to make the signal handler in user mode return to the kernel mode smoothly after execution?</strong></p>
+
+
+
+<p><strong>In various UNIX-like systems, this process is slightly different, but the general process is the same. Here is an example of Linux:</strong></p>
+
+
+
+<p><strong>In the second step, the kernel will help the user process save its context on the stack of the process</strong>&nbsp;<strong>Then fill in an address&nbsp;<code>rt_sigreturn</code>&nbsp;at the top of the stack, this address points to a piece of code, in which the&nbsp;<code>sigreturn</code>&nbsp;system call will be called.</strong>&nbsp;<strong>That means After Step 3 signal hander finished. The Stack Pointer(%rsp) point to&nbsp;<code>rt_sigreturn</code>&nbsp;and Execute that code passively</strong></p>
+
+
+
+<p><strong>The following figure shows the user process context, signal related information, and&nbsp;<code>rt_sigreturn</code>&nbsp;saved on the stack:</strong>&nbsp;<img src="https://i1.wp.com/image-angold4.test.upcdn.net/SignalFrame.png" alt="SignalFrame" width="750" height="671"></p>
+
+
+
+<p><strong>We called this: Signal Frame</strong>&nbsp;<strong>In the kernel&nbsp;<code>sigreturn</code>&nbsp;system call processing function, the process context will be restored according to the&nbsp;<code>Signal Frame</code>&nbsp;pointed to by the current stack pointer, and return to the user state, and resume execution from the suspension point.</strong></p>
+
+
+
+<h3>Signal Mechanism Defect Utilization</h3>
+
+
+
+<p><strong>From the Introduction below We can find two Defects:</strong></p>
+
+
+
+<ul><li><strong><code>Signal Frame</code>&nbsp;is stored in the address space of the user process and is readable and writable by the user process</strong></li><li><strong>The kernel does not compare the saving process with the recovery process. The kernel does not judge that the current&nbsp;<code>Signal Frame</code>&nbsp;is the&nbsp;<code>Signal Frame</code>&nbsp;saved by the kernel for the user process.</strong></li></ul>
+
+
+
+<figure class="wp-block-image"><img src="https://i1.wp.com/image-angold4.test.upcdn.net/Unixsignals.png" alt="Unix-Signals" /></figure>
+
+
+
+<p><strong>To Some Extent, &#8220;kernel agnostic about signal handlers&#8221; is both an advantage and disadvantage:</strong>&nbsp;<strong>The advantage is that Because the kernel does not need to spend energy to record the signal, and the disadvantage is that Because we can’t fake them. A malicious user process can forge it!</strong></p>
+
+
+
+<h3>Example: One of the Simplest Attacks</h3>
+
+
+
+<p><strong>Let us first assume that an attacker can control the stack of the user process, then it can forge a&nbsp;<code>Signal Frame</code>, as shown in the figure below:</strong></p>
+
+
+
+<figure class="wp-block-image"><img src="https://i0.wp.com/image-angold4.test.upcdn.net/FakeSignalFrame.png" alt="FakeSignalFrame" /></figure>
+
+
+
+<ul><li><strong>In this fake&nbsp;<code>Signal Frame</code>, set&nbsp;<code>%rax</code>&nbsp;to 59 (the&nbsp;<code>execve</code>&nbsp;system call number)</strong></li><li><strong>Set&nbsp;<code>rdi</code>&nbsp;to the address of the string&nbsp;<code>/bin/sh</code></strong></li><li><strong>Set&nbsp;<code>rip</code>&nbsp;to the memory address of the system call instruction&nbsp;<code>syscall</code></strong></li><li><strong>Set&nbsp;<code>rt_sigreturn</code>&nbsp;manually to the memory address of the&nbsp;<code>sigreturn</code>&nbsp;system call</strong></li></ul>
+
+
+
+<p><strong>In this example, once&nbsp;<code>sigreturn</code>&nbsp;returns, it will execute the&nbsp;<code>execve</code>&nbsp;system call and open a shell.</strong></p>
+
+
+
+<p><strong>This is the simplest attack. In this attack, there are 4 prerequisites:</strong></p>
+
+
+
+<ul><li><strong>Attackers can control the contents of the stack through vulnerabilities such as stack buffer overflow</strong></li><li><strong>Know the address of the stack (for example, you need to know the address of the string&nbsp;<code>/bin/sh</code>&nbsp;you constructed)</strong></li><li><strong>Know the address of the&nbsp;<code>syscall</code>&nbsp;instruction in memory</strong></li><li><strong>Know the memory address of the&nbsp;<code>sigreturn</code>&nbsp;system call</strong></li></ul>
+
+
+
+<p><strong>Compared with traditional ROP, this simplest SROP attack only needs to find two gadgets. Seems more easier</strong></p>
+
+
+
+<h3>System Call Chains</h3>
+
+
+
+<p><strong>The Simple Attack below Worked! But the effect produced by the attacker can only call a syscall. When the syscall returns, the control of the execution flow is lost, which obviously cannot meet most of the requirements.</strong></p>
+
+
+
+<p><strong>So, how do we use the above mechanism to make system calls continuously? In fact, the method is very simple. In addition to the above steps, you only need to add an additional control to the stack pointer&nbsp;<code>rsp</code>, as shown in the following figure:</strong></p>
+
+
+
+<p><img src="https://i2.wp.com/image-angold4.test.upcdn.net/Syscallchain.png" alt="Syscallchain" width="750" height="366">&nbsp;<strong>In addition, we need to replace the original simple&nbsp;<code>syscall</code>&nbsp;gadget with&nbsp;<code>syscall; ret</code>&nbsp;gadget so that every time&nbsp;<code>syscall</code>&nbsp;returns, the stack pointer will point to the next&nbsp;<code>Signal Frame</code>.</strong>&nbsp;<strong>Therefore, when the&nbsp;<code>ret</code>&nbsp;instruction is executed at this time, the&nbsp;<code>sigreturn</code>&nbsp;system call will be called again. In this way, the effect of continuous system calls can be achieved by operating the stack.</strong></p>
+
+
+
+<h3>Two Gadgets</h3>
+
+
+
+<p><strong>Another difference with normal ROP is that both of the two gadgets that SROP needed can be found in a specific location in memory:</strong></p>
+
+
+
+<ul><li><strong><code>Sigreturn</code></strong>&nbsp;<strong>Because Normal applications will not actively call it. The kernel fills the corresponding address on the stack, making the application process passively call.</strong>&lt;br&gt;&nbsp;<strong>Therefore, there is usually a piece of code in the system dedicated to calling&nbsp;<code>sigreturn</code>, The author of the paper found that in different UNIX-like systems, this code will appear in different locations, as shown in the following figure:</strong>&nbsp;<img src="https://i0.wp.com/image-angold4.test.upcdn.net/Sigreturn.png" alt="sigreturn" width="718" height="432"></li></ul>
+
+
+
+<blockquote class="wp-block-quote"><p><strong>Among them, in&nbsp;<code>Linux &lt;3.11 ARM</code>&nbsp;(the kernel used by most of Android), and&nbsp;<code>FreeBSB 9.2 x86_64</code>, this gadget can be found in a fixed memory address, while in other systems, it is generally stored in In the memory of the&nbsp;<code>libc</code>&nbsp;library, it seems that it is not so easy to find if it is protected by ASLR.</strong></p></blockquote>
+
+
+
+<ul><li><strong><code>syscall; ret</code></strong>&nbsp;<img src="https://i1.wp.com/image-angold4.test.upcdn.net/syscallret.png" alt="syscallret" width="718" height="293">&nbsp;<strong>If it is Linux &lt;3.3 x86_64 (the default kernel in Debian 7.0, Ubuntu long-term support, CentOS 6 system). You can find this code snippet directly in the fixed address [vsyscall].</strong>&nbsp;<strong>In addition to the two gadgets mentioned above that may exist at fixed addresses, in other systems, these two gadgets seem to be not so easy to find, especially in systems with ALSR protection.</strong></li></ul>
+
+
+
+<p><strong>However, if we compare it with traditional ROP, we can find that it reduces the cost of the entire attack by a notch.</strong></p>
+
+
+
+<blockquote class="wp-block-quote"><p><strong>SROP is among the lowest hanging fruit available to an attacker!</strong></p></blockquote>
+
+
+
+<p></p>
+
+
+
+<h2>3. The Prevention of SROP Attack</h2>
+
+
+
+<p><strong>Finally, let’s mention the prevention of SROP. From three perspectives, the author proposes three methods:</strong></p>
+
+
+
+<h3>1.Gadgets Prevention</h3>
+
+
+
+<p><strong>In the notes above We metioned that The two gadgets&nbsp;<code>sigreturn</code>&nbsp;and&nbsp;<code>syscall; ret</code>&nbsp;are very easy to find, especially in the presence of a particularly insecure mechanism like&nbsp;<code>vsyscall</code>. Therefore, we should try to avoid this mechanism and make the best use of protection mechanisms such as ASLR, making it difficult for attackers to find these gadgets.</strong></p>
+
+
+
+<p><strong>Of course, this method does not essentially solve the problem of SROP</strong></p>
+
+
+
+<h3>2.Signal Frame Canaries</h3>
+
+
+
+<p><strong>As we metioned that before. Borrowing from&nbsp;<a href="https://en.wikipedia.org/wiki/Buffer_overflow_protection#Canaries">stack canaries</a>&nbsp;mechanism (Also see&nbsp;<a href="https://github.com/Angold-4/Angold4-CSAPP/blob/master/ChapterNotes/Chapter3/canary.md">my Note</a>)</strong>&nbsp;<strong>Insert a randomly generated byte before the&nbsp;<code>rt_sigreturn</code>&nbsp;field of the&nbsp;<code>Signal Frame</code>. If an overflow occurs, the byte will be destroyed, so that it will be detected before the&nbsp;<code>sigreturn</code>&nbsp;occurs.</strong></p>
+
+
+
+<p><strong>Of course, there are many attacks against stack canaries, which also cannot essentially prevent the occurrence of SROP.</strong></p>
+
+
+
+<h3>3.Break Kernel Agnostic</h3>
+
+
+
+<p><strong>This will go back to the essence of SROP — Unknowability of the Kernel to Signal</strong></p>
+
+
+
+<p><strong>If we judge whether the current&nbsp;<code>Signal Frame</code>&nbsp;was created before the kernel when the kernel processes the&nbsp;<code>sigreturn</code>&nbsp;system call, then this problem can be fundamentally solved. Of course, this involves modifying some of the underlying design of the kernel, and it may also introduce some new problems.</strong></p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer responsive-max-width">
+		<span class="byline"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Posted by</span><span class="author vcard"><a class="url fn n" href="https://angold4.com/author/angold4/">angold4</a></span></span><span class="posted-on"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><path id="a" d="M0 0h24v24H0V0z"></path></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"></use></clipPath><path clip-path="url(#b)" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"></path></svg><a href="https://angold4.com/2021/02/01/sigreturn-oriented-programming-attack/" rel="bookmark"><time class="entry-date published" datetime="2021-02-01T03:00:05+08:00">1st Feb 2021</time><time class="updated" datetime="2021-06-03T18:48:46+08:00">3rd Jun 2021</time></a></span><span class="cat-links"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Posted in</span><a href="https://angold4.com/category/uncategorised/" rel="category tag">Uncategorized</a></span><span class="comments-link"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><a href="https://angold4.com/2021/02/01/sigreturn-oriented-programming-attack/#comments">2 Comments<span class="screen-reader-text"> on Sigreturn Oriented Programming&nbsp;Attack</span></a></span>	</footer><!-- .entry-footer -->
+</article><!-- #post-${ID} -->
+
+		</main><!-- .site-main -->
+	</section><!-- .content-area -->
+
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer responsive-max-width">
+	
+	<div class="site-info">
+			<a class="site-name" href="https://angold4.com/" rel="home">angold4.com</a><span class="comma">,</span>
+				<path d="M12.5225848,4.97949746 C13.0138466,5.87586309 13.2934037,6.90452431 13.2934037,7.99874074 C13.2934037,10.3205803 12.0351007,12.3476807 10.1640538,13.4385638 L12.0862862,7.88081544 C12.4453251,6.98296834 12.5648813,6.26504621 12.5648813,5.62667922 C12.5648813,5.39497674 12.549622,5.17994084 12.5225848,4.97949746 L12.5225848,4.97949746 Z M7.86730089,5.04801561 C8.24619178,5.02808979 8.58760099,4.98823815 8.58760099,4.98823815 C8.9267139,4.94809022 8.88671369,4.44972248 8.54745263,4.46957423 C8.54745263,4.46957423 7.52803983,4.54957381 6.86996227,4.54957381 C6.25158863,4.54957381 5.21247202,4.46957423 5.21247202,4.46957423 C4.87306282,4.44972248 4.83328483,4.96816418 5.17254589,4.98823815 C5.17254589,4.98823815 5.49358462,5.02808979 5.83269753,5.04801561 L6.81314716,7.73459399 L5.43565839,11.8651647 L3.14394256,5.04801561 C3.52312975,5.02808979 3.86416859,4.98823815 3.86416859,4.98823815 C4.20305928,4.94809022 4.16305906,4.44972248 3.82394616,4.46957423 C3.82394616,4.46957423 2.80475558,4.54957381 2.14660395,4.54957381 C2.02852925,4.54957381 1.88934333,4.54668493 1.74156477,4.54194422 C2.86690406,2.83350881 4.80113651,1.70529256 6.99996296,1.70529256 C8.638342,1.70529256 10.1302017,2.33173369 11.2498373,3.35765419 C11.222726,3.35602457 11.1962815,3.35261718 11.1683554,3.35261718 C10.5501299,3.35261718 10.1114609,3.89113285 10.1114609,4.46957423 C10.1114609,4.98823815 10.4107217,5.42705065 10.7296864,5.94564049 C10.969021,6.36482346 11.248578,6.90326506 11.248578,7.68133501 C11.248578,8.21992476 11.0413918,8.84503256 10.7696866,9.71584277 L10.1417574,11.8132391 L7.86730089,5.04801561 Z M6.99996296,14.2927074 C6.38218192,14.2927074 5.78595654,14.2021153 5.22195356,14.0362644 L7.11048207,8.54925635 L9.04486267,13.8491542 C9.05760348,13.8802652 9.07323319,13.9089317 9.08989995,13.9358945 C8.43574834,14.1661896 7.73285573,14.2927074 6.99996296,14.2927074 L6.99996296,14.2927074 Z M0.706448182,7.99874074 C0.706448182,7.08630113 0.902152921,6.22015756 1.25141403,5.43749503 L4.25357806,13.6627848 C2.15393732,12.6427902 0.706448182,10.4898387 0.706448182,7.99874074 L0.706448182,7.99874074 Z M6.99996296,0.999 C3.14016476,0.999 0,4.13905746 0,7.99874074 C0,11.8585722 3.14016476,14.999 6.99996296,14.999 C10.8596871,14.999 14,11.8585722 14,7.99874074 C14,4.13905746 10.8596871,0.999 6.99996296,0.999 L6.99996296,0.999 Z" id="wordpress-logo-simplified-cmyk" stroke="none" fill=“currentColor” fill-rule="evenodd"></path>
+			</svg></a>	</div><!-- .site-info -->
+</footer><!-- #colophon -->
+
+</div><!-- #page -->
+
+<!--  -->
+<script src='//0.gravatar.com/js/gprofiles.js?ver=202122y' id='grofiles-cards-js'></script>
+<script id='wpgroho-js-extra'>
+var WPGroHo = {"my_hash":""};
+</script>
+<script crossorigin='anonymous' type='text/javascript' src='https://s0.wp.com/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1610363240h'></script>
+
+	<script>
+		// Initialize and attach hovercards to all gravatars
+		( function() {
+			function init() {
+				if ( typeof Gravatar === 'undefined' ) {
+					return;
+				}
+
+				if ( typeof Gravatar.init !== 'function' ) {
+					return;
+				}
+
+				Gravatar.profile_cb = function ( hash, id ) {
+					WPGroHo.syncProfileData( hash, id );
+				};
+
+				Gravatar.my_hash = WPGroHo.my_hash;
+				Gravatar.init( 'body', '#wp-admin-bar-my-account' );
+			}
+
+			if ( document.readyState !== 'loading' ) {
+				init();
+			} else {
+				document.addEventListener( 'DOMContentLoaded', init );
+			}
+		} )();
+	</script>
+
+		<div style="display:none">
+	</div>
+
+<script>
+window.addEventListener( "load", function( event ) {
+	var link = document.createElement( "link" );
+	link.href = "https://s0.wp.com/wp-content/mu-plugins/actionbar/actionbar.css?v=20201002";
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	document.head.appendChild( link );
+
+	var script = document.createElement( "script" );
+	script.src = "https://s0.wp.com/wp-content/mu-plugins/actionbar/actionbar.js?v=20201002";
+	script.defer = true;
+	document.body.appendChild( script );
+} );
+</script>
+
+	<script crossorigin='anonymous' type='text/javascript' src='https://s0.wp.com/_static/??-eJzTLy/QTc7PK0nNK9EvyClNz8wr1i+uzCtJrMjITM/IAeKS1CJMEWP94uSizIISoOIM5/yiVL2sYh19yo1yKioFmldQQE3jAnISM/OABtrn2hqaGZqamJtZGhtlAQB2zF+I'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "https://s0.wp.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.head.appendChild( corecss );
+		var themecssurl = "https://s0.wp.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?m=1363304414h&amp;ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		document.head.appendChild( themecss );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+
+	// Infinite scroll support
+	if ( typeof( jQuery ) !== 'undefined' ) {
+		jQuery( function( $ ) {
+			$( document.body ).on( 'post-load', function() {
+				SyntaxHighlighter.highlight();
+			} );
+		} );
+	}
+</script>
+<script crossorigin='anonymous' type='text/javascript' src='https://s0.wp.com/_static/??/wp-content/js/devicepx.js,/wp-content/themes/pub/varia/js/primary-navigation.js,/wp-content/mu-plugins/admin-bar/masterbar-tracks.js,/wp-includes/js/wp-embed.min.js?m=1612197847j'></script>
+	<script>
+	/(trident|msie)/i.test(navigator.userAgent)&&document.getElementById&&window.addEventListener&&window.addEventListener("hashchange",function(){var t,e=location.hash.substring(1);/^[A-z0-9_-]+$/.test(e)&&(t=document.getElementById(e))&&(/^(?:a|select|input|button|textarea)$/i.test(t.tagName)||(t.tabIndex=-1),t.focus())},!1);
+	</script>
+	<script type="text/javascript">
+// <![CDATA[
+(function() {
+try{
+  if ( window.external &&'msIsSiteMode' in window.external) {
+    if (window.external.msIsSiteMode()) {
+      var jl = document.createElement('script');
+      jl.type='text/javascript';
+      jl.async=true;
+      jl.src='/wp-content/plugins/ie-sitemode/custom-jumplist.php';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jl, s);
+    }
+  }
+}catch(e){}
+})();
+// ]]>
+</script><script src="//stats.wp.com/w.js?61" defer></script> <script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'188722040','blog_tz':'8','user_lang':'en-gb','blog_lang':'en-gb','user_id':'0'}]);
+_stq.push(['view', {'blog':'188722040','v':'wpcom','tz':'8','user_id':'0','subd':'angold4'}]);
+_stq.push(['extra', {'crypt':'UE40eW5QN0p8M2Y/RE1TaVhzUzFMbjdWNHpwZGhTayxPSUFCMGNrd29+Smw0TDhnZmRTK0hlRi9QSGh6bi9GXVhBJWIlZlR5U1JMLU8/MkNtblkvY1dMTU5vWnduP0J3dWZLL1ZyVmRMbFI/XzA4W21XfCZxdk56OEJ+TmZvQ3hmSVRoQVBjdmswV0RrW0xRNGVjbiUyb01KTGMmbSUtYSVVMGxIanZVJXRqaW11ZV1UTzY5U0ZrVDctMHImMHVtYmhneFtjNndRQVljX2xXWmdUVFJycUxqaHNiOWI1UHNiS3dLVE9iZzd2V0RLczVYVlRdYTZbV1gubnwsa1F5PXo5a18v'}]);
+_stq.push([ 'clickTrackerInit', '188722040', '0' ]);
+	</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:1px;width:1px;overflow:hidden;position:absolute;bottom:1px;" alt="" /></noscript>
+<script defer id="bilmur"  data-provider="wordpress.com" data-service="simple" src="/wp-content/js/bilmur.min.js?m=202122"></script><script>
+if ( 'object' === typeof wpcom_mobile_user_agent_info ) {
+
+	wpcom_mobile_user_agent_info.init();
+	var mobileStatsQueryString = "";
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedPlatformName )
+		mobileStatsQueryString += "&x_" + 'mobile_platforms' + '=' + wpcom_mobile_user_agent_info.matchedPlatformName;
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedUserAgentName )
+		mobileStatsQueryString += "&x_" + 'mobile_devices' + '=' + wpcom_mobile_user_agent_info.matchedUserAgentName;
+	
+	if( wpcom_mobile_user_agent_info.isIPad() )
+		mobileStatsQueryString += "&x_" + 'ipad_views' + '=' + 'views';
+
+	if( "" != mobileStatsQueryString ) {
+		new Image().src = document.location.protocol + '//pixel.wp.com/g.gif?v=wpcom-no-pv' + mobileStatsQueryString + '&baba=' + Math.random();
+	}
+	
+}
+</script>
+</body>
+</html>

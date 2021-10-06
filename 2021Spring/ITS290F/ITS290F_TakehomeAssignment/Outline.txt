@@ -1,0 +1,57 @@
+ITS290F Take-home Assignment Outline:
+
+1. Introduction: 
+
+Brief introduction:
+* define the user experience elements in interactive systems.
+* apply user experience design techniques to software application development.
+* design usable interface for computer-based systems.
+* evaluate usability of computer-based systems.
+
+Good User experience:
+https://codeforces.com/contests
+
+
+Bad User experience:
+https://angold4.com (modified on purpose)
+
+2. Analysis
+According to UI Design – Guidelines and Principles (Part 2)...
+
+Journey(Common):
+Codeforces: Competitive programmer
+angold4.com: Some guys who interested in computer science and wants to know more about this writer
+
+Analysis them respectively
+
+Codeforces(good):
+* Aesthetic and minimalist design
+* Consistency and standards
+* Visibility of system status
+* Prevent errors
+* Strive for consistency
+* Design dialogs to yield closure
+* Reduce short-term memory load
+
+
+angold4.com(bad):
+* Error prevention:
+    * mistake
+    * slip (calendar)
+* Aesthetic and minimalist design
+* Match between system and the real world (calendar)
+
+Optimization first (as you can)
+1. Contact me (add Calender) <Match between system and the real world>
+2. Error prevention <when input date>
+3. Reduce short-term memory load <avoid many features in index page>
+4. Offer informative feedback<Button>
+5. Strive for consistency <Same Color and size of buttom>
+
+
+3. Suggestion
+improvement to the bad UI
+
+implement it
+    
+4. Conclution

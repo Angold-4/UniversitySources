@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Example</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<style>
+		ul {
+			list-style: none;
+			color: red;
+			font-size: small;
+		}
+
+		ul li.checked {
+			color: green;
+		}
+
+		ul li.checked::before {
+			content: '✓ ';
+			color: green;
+		}
+
+		ul li::before {
+			content: '✗ ';
+		}
+	</style>
+</head>
+ 
+<body>
+	<div class="container">
+		<div class="row justify-content-center align-items-center">
+			<h3>Create Password</h3>
+		</div>
+		<form>
+			<div class="form-group">
+				<label for="password1">Password</label>
+				<input type="password" class="form-control" id="password1" placeholder="Password" oninput="validatePassword()">
+			</div>
+			<div id="passwordHint" class="font-weight-lighter">
+				<ul>
+					<li id="rule1">Your password must be at least 8 characters long</li>
+					<li id="rule2">Must contain at least 1 number</li>
+				</ul>
+			</div>
+			<div class="form-group">
+				<label for="password2">Confirm Password</label>
+				<input type="password" class="form-control" id="password2" placeholder="Password" oninput="checkSamePassword()">
+			</div>
+			<div id="confirmPasswordHint" class="font-weight-lighter d-none">
+				<ul>
+					<li>Passwords do not match</li>
+				</ul>
+			</div>
+			<button type="submit" class="btn btn-primary" id="btn">Submit</button>
+		</form>
+	</div>
+
+	<script>
+		function validatePassword() {
+			if (document.getElementById("password1").value.length >= 8) {
+				document.getElementById("rule1").classList.add("checked");
+			} else {
+				document.getElementById("rule1").classList.remove("checked");
+			}
+			if (/\d/.test(document.getElementById("password1").value)) {
+				document.getElementById("rule2").classList.add("checked");
+			} else {
+				document.getElementById("rule2").classList.remove("checked");
+			}
+			checkSamePassword();	
+		}
+
+		function checkSamePassword() {
+			if (document.getElementById("password1").value === document.getElementById("password2").value) {
+				showConfirmPasswordHint("no")
+                disableButton("no");
+			}	
+			else {
+				showConfirmPasswordHint("yes")
+                disableButton("yes");
+			}
+		}
+
+		function showConfirmPasswordHint(status) {
+			if (status == "yes") {
+				document.getElementById("confirmPasswordHint").classList.remove("d-none");
+				document.getElementById("confirmPasswordHint").classList.add("d-block");
+			} else {
+				document.getElementById("confirmPasswordHint").classList.remove("d-block");
+				document.getElementById("confirmPasswordHint").classList.add("d-none");
+			}
+		}
+
+		function disableButton(status) {
+			if (status == "yes") {
+                document.getElementById("btn").disabled = true;
+				// statements for disabling the button 
+			} else {
+				// statements for enabling the button 
+                document.getElementById("btn").disabled = false;
+			}
+		}   
+
+
+	</script>
+</body>
+</html>
