@@ -1,0 +1,29 @@
+00 IN 
+01 STO 90
+02 LDA 91
+03 SUB 90 ; 5-x
+04 BRP 19 ; if pos ret 0
+05 LDA 90
+06 SUB 92 ; x-1
+07 STO 90
+08 BR 23
+
+19 LDA 90
+20 SUB 90
+21 STO 90 ; x-x = 0
+22 LDA 90 ; out ans
+23 BRZ 30 ; if zero ret
+24 OUT ; out ans
+25 STO 90
+26 LDA 91
+27 SUB 90
+28 BRZ 31
+29 BR 02;
+
+
+30 OUT;
+31 HLT;
+
+90 DAT    ; ret
+91 DAT 5  ; -
+92 DAT 1  ; for sub
