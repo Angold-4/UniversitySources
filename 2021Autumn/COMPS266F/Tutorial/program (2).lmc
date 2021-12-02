@@ -1,0 +1,29 @@
+00 IN 
+01 STO 90
+02 IN
+03 STO 91
+; 1. if x < y then return 0 and remain
+04 SUB 90 ; y - x
+05 BRP 30 ; if > 0 then return the remainder
+; 2. calculate div and remainder
+06 LDA 90;
+07 SUB 91; x -= y
+08 STO 90
+09 LDA 92;
+10 ADD 94; div += 1
+11 STO 92;
+12 BR 04;
+
+30 STO 93
+31 LDA 92; div
+32 OUT;
+33 LDA 93; remainder
+34 OUT;
+
+
+; Data 
+90 DAT ; x
+91 DAT ; y
+92 DAT 0 ; div
+93 DAT ; remain
+94 DAT 1; constant
