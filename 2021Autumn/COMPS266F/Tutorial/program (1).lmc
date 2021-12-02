@@ -1,0 +1,43 @@
+00 IN
+01 STO 90 ; x
+02 IN
+03 STO 91 ; y
+; now calculate x^2
+04 LDA 90 ;
+05 BR 14  ;
+
+; now calculate y^2
+06 LDA 93 ;
+07 STO 96 ; x^2
+08 LDA 94 ;
+09 STO 93 ; 
+10 LDA 96 ; 
+11 STO 94 ; update 94 means after dealing with y then return
+12 LDA 91 ; 
+13 STO 90 ;
+
+; calculate a^2
+14 STO 92 ; 
+15 LDA 93 ; a
+16 ADD 90 ; a + a
+17 STO 93 ; 
+18 LDA 92 ; 
+19 SUB 95 ; times - 1
+20 BRZ 22 ; 
+21 BR 14 ; 
+
+22 LDA 94 ; if we do not deal with y yet
+23 BRZ 06 ; jump and calculate y^2
+; else just return ans
+24 LDA 96 ;
+25 SUB 93 ;
+26 OUT ;
+27 HLT ;
+
+90 DAT ; x
+91 DAT ; y
+92 DAT ; times
+93 DAT 0; a^2
+94 DAT 0;
+95 DAT 1 
+96 DAT ; ANS
